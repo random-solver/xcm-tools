@@ -30,18 +30,17 @@ export const getTransferInfo = async <
 }: TGetTransferInfoOptions<TApi, TRes, TSigner, TCustomChain, TCurrency>): Promise<
   TTransferInfo<TCurrency>
 > => {
-  if (api.isChainEvm(origin) && !ahAddress) {
-    throw new MissingParameterError('ahAddress', `ahAddress is required for EVM origin ${origin}.`)
-  }
-
-  const resolvedFeeAsset = feeAsset
-    ? resolveFeeAsset(api, feeAsset, origin, destination, currency)
-    : undefined
-
-  await api.init(origin)
+  await api.init(origin, undefined, destination)
   api.disconnectAllowed = false
 
   try {
+    if (api.isChainEvm(origin) && !ahAddress) {
+      throw new MissingParameterError('ahAddress', `ahAddress is required for EVM origin ${origin}.`)
+    }
+
+    const resolvedFeeAsset = feeAsset
+      ? resolveFeeAsset(api, feeAsset, origin, destination, currency)
+      : undefined
     const { assets, asset: originAsset } = resolveCurrency(
       api,
       currency,
