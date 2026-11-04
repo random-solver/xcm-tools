@@ -257,7 +257,14 @@ export abstract class PolkadotApi<TApi, TRes, TSigner, TCustomChain extends stri
     clientTtlMs: number = DEFAULT_TTL_MS,
     destination?: TDestination
   ): Promise<void> {
-    if (this._chain === chain || isExternalChain(chain)) {
+    if (isExternalChain(chain)) {
+      return
+    }
+
+    if (this._chain === chain) {
+      if (typeof destination === 'string' && isCustomChain(destination)) {
+        await this.hydrateCustomChain(destination)
+      }
       return
     }
 
