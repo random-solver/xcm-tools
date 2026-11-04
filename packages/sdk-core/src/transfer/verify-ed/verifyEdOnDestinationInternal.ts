@@ -36,6 +36,8 @@ export const verifyEdOnDestinationInternal = async <
 
   if (isExternalChain(destination)) return true
 
+  await api.init(origin, undefined, destination)
+
   validateAddress(api, recipient, destination, true)
 
   const isSubBridge = isSubstrateBridge(origin, destination)
