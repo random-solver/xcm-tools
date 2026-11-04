@@ -13,9 +13,9 @@ export const getAssetBalanceInternal = async <
   chain,
   asset
 }: TGetAssetBalanceOptions<TApi, TRes, TSigner, TCustomChain>): Promise<bigint> => {
-  validateAddress(api, address, chain, false)
-
   await api.init(chain)
+
+  validateAddress(api, address, chain, false)
 
   const chainInstance = getChainImpl<TApi, TRes, TSigner, TCustomChain>(chain, api._customCtx)
   return chainInstance.getBalance(api, address, asset)
@@ -25,6 +25,7 @@ export const getBalanceInternal = async <TApi, TRes, TSigner, TCustomChain exten
   options: TGetBalanceOptions<TApi, TRes, TSigner, TCustomChain>
 ): Promise<bigint> => {
   const { api, chain, currency } = options
+  await api.init(chain)
   const asset = currency
     ? api.findAssetInfoOrThrow(chain, currency)
     : api.findNativeAssetInfoOrThrow(chain)
