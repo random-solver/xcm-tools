@@ -151,6 +151,8 @@ export const getTransferableAmountInternal = async <
 ): Promise<TPerAssetResult<TCurrency, bigint>> => {
   const { api, sender, origin: chain, destination, currency, feeAsset } = options
 
+  await api.init(chain, undefined, destination)
+
   validateAddress(api, sender, chain, false)
 
   const resolvedFeeAsset = feeAsset
