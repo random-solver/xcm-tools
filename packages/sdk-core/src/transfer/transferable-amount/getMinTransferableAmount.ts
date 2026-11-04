@@ -33,6 +33,8 @@ export const getMinTransferableAmountInternal = async <
 }: TGetMinTransferableAmountOptions<TApi, TRes, TSigner, TCustomChain, TCurrency>): Promise<
   TPerAssetResult<TCurrency, bigint>
 > => {
+  await api.init(origin, undefined, destination)
+
   validateAddress(api, sender, origin, false)
 
   const resolvedFeeAsset = feeAsset
